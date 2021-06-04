@@ -25,12 +25,12 @@ public class HangmanApi {
 	}
 
 	@GetMapping("/games/{gameId}")
-	public GameInfo getGameInfo(@PathVariable String gameId) {
+	public GameInfo getGameInfo(@PathVariable Long gameId) {
 		return hangmanService.getGame(gameId);
 	}
 
 	@PostMapping("/games/{gameId}/tryes")
-	public ResponseEntity<GameInfo> makeTry(@PathVariable String gameId, @RequestParam Character letter) {
+	public ResponseEntity<GameInfo> makeTry(@PathVariable Long gameId, @RequestParam Character letter) {
 		GameInfo game = hangmanService.getGame(gameId);
 		if (game == null) {
 			ResponseEntity.notFound().build();

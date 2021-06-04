@@ -2,30 +2,29 @@ package pu.fmi.web.hangman.logic;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.RandomUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pu.fmi.web.hangman.model.GameInfo;
+import pu.fmi.web.hangman.model.GameInfoRepo;
 
 @Service
 public class HangmanService {
 
 	public static final String[] WORDS = { "word", "office", "atom", "concurrent" };
 
-	public Map<String, GameInfo> games = new ConcurrentHashMap<>();
+	@Autowired
+	private GameInfoRepo games;
 
 	public GameInfo startNewGame() {
 		GameInfo game = new GameInfo();
-		game.setId(UUID.randomUUID().toString());
 		int wordIndex = RandomUtils.nextInt(0, WORDS.length - 1);
 		game.setWord(WORDS[wordIndex]);
 		game.setLetersLeft(removeChars(game.getWord().toCharArray()));
 
-		games.put(game.getId(), game);
+		games.save(game);
 		return game;
 	}
 
@@ -38,11 +37,11 @@ public class HangmanService {
 		return charsLeft;
 	}
 
-	public GameInfo getGame(String gameId) {
-		return games.get(gameId);
+	public GameInfo getGame(Long gameId) {
+		return games.getById(gameId);
 	}
 
-	public GameInfo makeTry(String gameId, char letter) {
+	public GameInfo makeTry(Long gameId, char letter) {
 		GameInfo game = getGame(gameId);
 		return null;
 	}
